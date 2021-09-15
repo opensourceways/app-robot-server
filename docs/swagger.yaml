@@ -1,0 +1,110 @@
+basePath: /v1
+definitions:
+  response.BaseResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
+  response.LoginResult:
+    properties:
+      token:
+        type: string
+      user_id:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: plugin maintenance server api doc
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Swagger app-robot-server API
+  version: 0.0.1
+paths:
+  /accounts/login:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: 账号
+        in: formData
+        name: account
+        required: true
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回token和userId
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.LoginResult'
+              type: object
+        "400":
+          description: 错误返回
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "403":
+          description: 错误返回
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "500":
+          description: 错误返回
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: 账号密码登录
+      tags:
+      - Accounts
+  /accounts/register:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: 邮箱
+        in: formData
+        name: account
+        required: true
+        type: string
+      - description: 验证码
+        in: formData
+        name: code
+        required: true
+        type: string
+      - description: 用户名
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 返回注册状态
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: 账号注册
+      tags:
+      - Accounts
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: x-token
+    type: apiKey
+swagger: "2.0"
