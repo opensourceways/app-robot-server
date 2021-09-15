@@ -1,0 +1,12 @@
+port: 8888
+runMode: dev
+# logger configuration
+log:
+  prefix: '[APP-ROBOT-SERVER]'
+  level: 'DEBUG'
+  saveFile: false
+
+#jwt configuration
+jwt:
+  signingKey: '!v@8#z$%v^t&g*('
+  tokenExpiration: 2 #Token expiration time unit: hour
