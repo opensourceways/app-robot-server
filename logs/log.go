@@ -10,7 +10,7 @@ import (
 	rotatelog "github.com/lestrrat/go-file-rotatelogs"
 	"github.com/op/go-logging"
 
-	"github.com/opensourceway/app-robot-server/config"
+	"github.com/opensourceways/app-robot-server/config"
 )
 
 const (

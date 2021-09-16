@@ -8,9 +8,9 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/opensourceway/app-robot-server/config"
-	"github.com/opensourceway/app-robot-server/logs"
-	"github.com/opensourceway/app-robot-server/router"
+	"github.com/opensourceways/app-robot-server/config"
+	"github.com/opensourceways/app-robot-server/logs"
+	"github.com/opensourceways/app-robot-server/router"
 )
 
 // @title Swagger app-robot-server API

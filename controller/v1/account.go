@@ -3,9 +3,9 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/opensourceway/app-robot-server/global"
-	"github.com/opensourceway/app-robot-server/models/request"
-	"github.com/opensourceway/app-robot-server/service"
+	"github.com/opensourceways/app-robot-server/global"
+	"github.com/opensourceways/app-robot-server/models/request"
+	"github.com/opensourceways/app-robot-server/service"
 )
 
 type AccountController struct {

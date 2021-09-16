@@ -5,9 +5,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/opensourceway/app-robot-server/global"
-	"github.com/opensourceway/app-robot-server/models"
-	"github.com/opensourceway/app-robot-server/models/response"
+	"github.com/opensourceways/app-robot-server/global"
+	"github.com/opensourceways/app-robot-server/models"
+	"github.com/opensourceways/app-robot-server/models/response"
 )
 
 func illegalToken(c *gin.Context, code int, msg string) {

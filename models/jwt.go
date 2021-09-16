@@ -6,7 +6,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 
-	"github.com/opensourceway/app-robot-server/config"
+	"github.com/opensourceways/app-robot-server/config"
 )
 
 var (

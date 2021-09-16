@@ -9,11 +9,11 @@ import (
 	swagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 
-	"github.com/opensourceway/app-robot-server/config"
-	v1 "github.com/opensourceway/app-robot-server/controller/v1"
-	_ "github.com/opensourceway/app-robot-server/docs"
-	"github.com/opensourceway/app-robot-server/global"
-	"github.com/opensourceway/app-robot-server/middleware"
+	"github.com/opensourceways/app-robot-server/config"
+	v1 "github.com/opensourceways/app-robot-server/controller/v1"
+	_ "github.com/opensourceways/app-robot-server/docs"
+	"github.com/opensourceways/app-robot-server/global"
+	"github.com/opensourceways/app-robot-server/middleware"
 )
 
 type IRouter interface {
