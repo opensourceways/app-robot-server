@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["log.go"],
+    importpath = "github.com/opensourceways/app-robot-server/logs",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//config:go_default_library",
+        "@com_github_lestrrat_go_file_rotatelogs//:go_default_library",
+        "@com_github_op_go_logging//:go_default_library",
+    ],
+)

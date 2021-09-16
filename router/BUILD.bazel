@@ -1,0 +1,20 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["route.go"],
+    importpath = "github.com/opensourceways/app-robot-server/router",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//config:go_default_library",
+        "//controller/v1:go_default_library",
+        "//docs:go_default_library",
+        "//global:go_default_library",
+        "//middleware:go_default_library",
+        "@com_github_gin_gonic_gin//:go_default_library",
+        "@com_github_gin_gonic_gin//binding:go_default_library",
+        "@com_github_go_playground_validator_v10//:go_default_library",
+        "@com_github_swaggo_gin_swagger//:go_default_library",
+        "@com_github_swaggo_gin_swagger//swaggerFiles:go_default_library",
+    ],
+)

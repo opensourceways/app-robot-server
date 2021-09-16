@@ -5,12 +5,12 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 
-	"github.com/opensourceway/app-robot-server/config"
-	"github.com/opensourceway/app-robot-server/global"
-	"github.com/opensourceway/app-robot-server/logs"
-	"github.com/opensourceway/app-robot-server/models"
-	"github.com/opensourceway/app-robot-server/models/request"
-	"github.com/opensourceway/app-robot-server/models/response"
+	"github.com/opensourceways/app-robot-server/config"
+	"github.com/opensourceways/app-robot-server/global"
+	"github.com/opensourceways/app-robot-server/logs"
+	"github.com/opensourceways/app-robot-server/models"
+	"github.com/opensourceways/app-robot-server/models/request"
+	"github.com/opensourceways/app-robot-server/models/response"
 )
 
 func DoLogin(params request.Login) (*response.LoginResult, global.Error) {

@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/opensourceway/app-robot-server/logs"
+	"github.com/opensourceways/app-robot-server/logs"
 )
 
 func Logger() gin.HandlerFunc {
