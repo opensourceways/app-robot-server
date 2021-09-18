@@ -9,7 +9,9 @@ import (
 	"time"
 
 	"github.com/opensourceways/app-robot-server/config"
+	"github.com/opensourceways/app-robot-server/dbmodels"
 	"github.com/opensourceways/app-robot-server/logs"
+	"github.com/opensourceways/app-robot-server/mongodb"
 	"github.com/opensourceways/app-robot-server/router"
 )
 
@@ -33,6 +35,12 @@ func main() {
 	if err := logs.Init(); err != nil {
 		logs.Logger.Fatal(err)
 	}
+
+	db, err := mongodb.Initialize(&config.Application.Mongo)
+	if err != nil {
+		logs.Logger.Fatal(err)
+	}
+	dbmodels.RegisterDB(db)
 
 	runServer()
 }

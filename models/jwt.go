@@ -25,7 +25,7 @@ type CustomClaims struct {
 	jwt.StandardClaims
 }
 
-//NewJwt create a JWT object
+//NewJwt create a JWTConfig object
 func NewJwt() *JWT {
 	return &JWT{[]byte(config.Application.Jwt.SigningKey)}
 }

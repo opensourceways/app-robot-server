@@ -9,27 +9,34 @@ import (
 	"github.com/spf13/viper"
 )
 
-var Application = new(server)
+var Application = new(appConfig)
 
-type Log struct {
-	Prefix   string `json:"prefix" yaml:"prefix"`
-	Level    string `json:"level" yaml:"level"`
-	SaveFile bool   `json:"saveFile" yaml:"saveFile"`
+type LogConfig struct {
+	Prefix   string `json:"prefix"`
+	Level    string `json:"level"`
+	SaveFile bool   `json:"saveFile"`
 }
 
-type JWT struct {
+type JWTConfig struct {
 	SigningKey      string `json:"signingKey" yaml:"signingKey"`
 	TokenExpiration int64  `json:"tokenExpiration",yaml:"tokenExpiration"`
 }
 
-type server struct {
-	Port    string `json:"port" yaml:"port"`
-	RunMode string `json:"runMode" yaml:"runMode"`
-	Log     Log    `json:"log" yaml:"log"`
-	Jwt     JWT    `json:"jwt" yaml:"jwt"`
+type MongoDBConfig struct {
+	ConnURI         string `json:"connURI"`
+	DBName          string `json:"dbName"`
+	UsersCollection string `json:"usersCollection"`
 }
 
-func (s server) validate() error {
+type appConfig struct {
+	Port    string        `json:"port"`
+	RunMode string        `json:"runMode"`
+	Log     LogConfig     `json:"log"`
+	Jwt     JWTConfig     `json:"jwt"`
+	Mongo   MongoDBConfig `json:"mongo"`
+}
+
+func (s appConfig) validate() error {
 	return nil
 }
 
