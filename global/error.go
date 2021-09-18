@@ -13,7 +13,9 @@ const (
 )
 
 const (
-	IllegalInputErrCode = 4001
+	IllegalInputErrCode  = 4001
+	RegisteredErrCode    = 4002
+	NoUserOrPasswordCode = 4003
 )
 
 const (
@@ -29,6 +31,8 @@ const (
 	AccountPasswordErrMsg = "incorrect account or password"
 	EmptyTokenErrMsg      = "token not obtained"
 	TokenHasExpiredMsg    = "token has expired"
+	RegisteredErrMsg      = "input info is registered"
+	NoUserOrPasswordMsg   = "no user or password mismatch "
 )
 
 type Error interface {
@@ -49,4 +53,8 @@ func (re ResponseError) Code() int {
 
 func (re ResponseError) Msg() string {
 	return re.Reason
+}
+
+func NewResponseSystemError() ResponseError {
+	return ResponseError{ErrCode: SystemErrorCode, Reason: ServerErrorMsg}
 }

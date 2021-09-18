@@ -24,7 +24,7 @@ import (
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @in header
-// @name x-token
+// @name access-token
 // @BasePath /v1
 func main() {
 	//TODO: config file path parse from the args by flag package
@@ -41,7 +41,10 @@ func main() {
 		logs.Logger.Fatal(err)
 	}
 	dbmodels.RegisterDB(db)
-
+	err = dbmodels.GetDB().InitCUsers()
+	if err != nil {
+		logs.Logger.Fatal(err)
+	}
 	runServer()
 }
 

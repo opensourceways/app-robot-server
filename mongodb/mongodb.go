@@ -30,6 +30,10 @@ func (c *client) collection(name string) *mongo.Collection {
 	return c.db.Collection(name)
 }
 
+func (c *client) getUsersCollection() *mongo.Collection {
+	return c.collection(c.usersCollection)
+}
+
 func (c *client) doTransaction(f func(mongo.SessionContext) error) error {
 
 	callback := func(sc mongo.SessionContext) (interface{}, error) {
@@ -87,3 +91,4 @@ func withContext(f func(context.Context) error) error {
 	defer cancel()
 	return f(ctx)
 }
+
