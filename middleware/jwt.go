@@ -7,11 +7,10 @@ import (
 
 	"github.com/opensourceways/app-robot-server/global"
 	"github.com/opensourceways/app-robot-server/models"
-	"github.com/opensourceways/app-robot-server/models/response"
 )
 
 func illegalToken(c *gin.Context, code int, msg string) {
-	c.JSON(http.StatusUnauthorized, response.BaseResponse{Code: code, Msg: msg})
+	c.JSON(http.StatusUnauthorized, models.BaseResponse{Code: code, Msg: msg})
 	c.Abort()
 }
 

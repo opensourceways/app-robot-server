@@ -10,3 +10,9 @@ log:
 jwt:
   signingKey: '!v@8#z$%v^t&g*('
   tokenExpiration: 2 #Token expiration time unit: hour
+
+#mongodb configuration
+mongo:
+  connURI: mongodb://admin:123456@localhost:27017
+  dbName: robot
+  usersCollection: users
