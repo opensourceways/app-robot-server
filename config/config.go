@@ -30,11 +30,17 @@ type MongoDBConfig struct {
 }
 
 type appConfig struct {
-	Port    string        `json:"port"`
-	RunMode string        `json:"runMode"`
-	Log     LogConfig     `json:"log"`
-	Jwt     JWTConfig     `json:"jwt"`
-	Mongo   MongoDBConfig `json:"mongo"`
+	Port       string           `json:"port"`
+	RunMode    string           `json:"runMode"`
+	Log        LogConfig        `json:"log"`
+	Jwt        JWTConfig        `json:"jwt"`
+	Mongo      MongoDBConfig    `json:"mongo"`
+	Kubernetes KubernetesConfig `json:"kubernetes"`
+}
+
+type KubernetesConfig struct {
+	KubeConfigPath string `json:"kubeConfigPath"`
+	Namespace      string `json:"namespace"`
 }
 
 func (s appConfig) validate() error {

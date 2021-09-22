@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/opensourceways/app-robot-server/k8s"
 	"net/http"
 	"os"
 	"os/signal"
@@ -45,6 +46,12 @@ func main() {
 	if err != nil {
 		logs.Logger.Fatal(err)
 	}
+
+	err = k8s.Init(&config.Application.Kubernetes)
+	if err != nil {
+		logs.Logger.Fatal(err)
+	}
+
 	runServer()
 }
 

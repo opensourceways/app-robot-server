@@ -17,3 +17,8 @@ mongo:
   dbName: robot
   usersCollection: users
   pluginsCollection: plugins
+
+#kubernetes configuration
+kubernetes:
+  kubeConfigPath: /home/.kube/config
+  namespace: robot-plugin
