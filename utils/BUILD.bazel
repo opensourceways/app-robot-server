@@ -3,10 +3,9 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "go_default_library",
     srcs = [
-        "db.go",
-        "error.go",
-        "user.go",
+        "encryption.go",
+        "regexps.go",
     ],
-    importpath = "github.com/opensourceways/app-robot-server/dbmodels",
+    importpath = "github.com/opensourceways/app-robot-server/utils",
     visibility = ["//visibility:public"],
 )

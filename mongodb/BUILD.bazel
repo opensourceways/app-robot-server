@@ -6,6 +6,7 @@ go_library(
         "error.go",
         "mongodb.go",
         "ops.go",
+        "users.go",
         "util.go",
     ],
     importpath = "github.com/opensourceways/app-robot-server/mongodb",
@@ -13,6 +14,7 @@ go_library(
     deps = [
         "//config:go_default_library",
         "//dbmodels:go_default_library",
+        "//utils:go_default_library",
         "@com_github_huaweicloud_golangsdk//:go_default_library",
         "@org_mongodb_go_mongo_driver//bson:go_default_library",
         "@org_mongodb_go_mongo_driver//bson/primitive:go_default_library",
