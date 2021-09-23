@@ -13,6 +13,7 @@ go_library(
     deps = [
         "//config:go_default_library",
         "//dbmodels:go_default_library",
+        "//k8s:go_default_library",
         "//logs:go_default_library",
         "//mongodb:go_default_library",
         "//router:go_default_library",

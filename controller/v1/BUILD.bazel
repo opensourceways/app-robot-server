@@ -5,6 +5,7 @@ go_library(
     srcs = [
         "account.go",
         "base.go",
+        "instance.go",
         "plugins.go",
     ],
     importpath = "github.com/opensourceways/app-robot-server/controller/v1",

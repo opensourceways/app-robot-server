@@ -128,8 +128,8 @@ func Init(cfg *config.KubernetesConfig) error {
 		return err
 	}
 	k8sClient = &client{Clientset: clientSet, ctx: context.TODO(), namespace: cfg.Namespace}
-	err = k8sClient.CreateNamespaceIfNotExist(cfg.Namespace)
-	return err
+
+	return k8sClient.CreateNamespaceIfNotExist(cfg.Namespace)
 }
 
 func int32Ptr(i int32) *int32 { return &i }

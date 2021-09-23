@@ -4,6 +4,7 @@ go_library(
     name = "go_default_library",
     srcs = [
         "error.go",
+        "instance.go",
         "mongodb.go",
         "ops.go",
         "plugins.go",
