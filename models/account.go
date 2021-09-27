@@ -31,7 +31,7 @@ func (l *Login) DoLogin() (*LoginResult, global.Error) {
 		return nil, repErr
 	}
 
-	token, err := genToken(user.ID)
+	token, err := genToken(user.ID, user.LoginName)
 	if err != nil {
 		logs.Logger.Error(err)
 		return nil, global.ResponseError{ErrCode: global.SystemErrorCode, Reason: global.ServerErrorMsg}

@@ -21,7 +21,8 @@ type JWT struct {
 }
 
 type CustomClaims struct {
-	ID string
+	ID   string
+	Name string
 	jwt.StandardClaims
 }
 
@@ -82,10 +83,11 @@ func (j *JWT) RefreshToken(tokenString string) (string, error) {
 	return "", TokenInvalid
 }
 
-func genToken(userId string) (string, error) {
+func genToken(userId, name string) (string, error) {
 	j := NewJwt()
 	claims := CustomClaims{
-		ID: userId,
+		ID:   userId,
+		Name: name,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix() - 1000,
 			ExpiresAt: time.Now().Unix() + config.Application.Jwt.TokenExpiration*60*60,

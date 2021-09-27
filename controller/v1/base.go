@@ -52,3 +52,15 @@ func (bc *baseController) responseWithError(c *gin.Context, err global.Error) {
 	}
 	bc.responseServerErrorWithCode(c, statusCode, err)
 }
+
+func (bc *baseController) GetUserName(c *gin.Context) string {
+	value, exists := c.Get(global.CKGToken)
+	if !exists {
+		return ""
+	}
+	r, ok := value.(*models.CustomClaims)
+	if !ok {
+		return ""
+	}
+	return r.Name
+}

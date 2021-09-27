@@ -19,7 +19,8 @@ type client struct {
 	*mongo.Client
 	db *mongo.Database
 
-	usersCollection string
+	usersCollection   string
+	pluginsCollection string
 }
 
 func (c *client) Close() error {
@@ -71,9 +72,10 @@ func Initialize(cfg *config.MongoDBConfig) (dbmodels.IDB, error) {
 	}
 
 	cli := &client{
-		Client:          c,
-		db:              c.Database(cfg.DBName),
-		usersCollection: cfg.UsersCollection,
+		Client:            c,
+		db:                c.Database(cfg.DBName),
+		usersCollection:   cfg.UsersCollection,
+		pluginsCollection: cfg.PluginsCollection,
 	}
 	return cli, nil
 }
@@ -91,4 +93,3 @@ func withContext(f func(context.Context) error) error {
 	defer cancel()
 	return f(ctx)
 }
-

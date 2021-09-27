@@ -439,9 +439,326 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/developer/plugins": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "developer"
+                ],
+                "summary": "Plug-in developers get the list of plug-ins created by themselves",
+                "responses": {
+                    "200": {
+                        "description": "success result",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dbmodels.Plugin"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "developer"
+                ],
+                "summary": "add a plugin",
+                "parameters": [
+                    {
+                        "description": "plugin data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Plugin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "success result",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/developer/plugins/{pluginName}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "developer"
+                ],
+                "summary": "Plug-in developers get the details of plug-ins created by themselves",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "plugin name",
+                        "name": "pluginName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success result",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dbmodels.Plugin"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/developer/plugins/{pluginName}/versions": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "developer"
+                ],
+                "summary": "submit a new version for a plugin",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "the plug-in corresponding to the version ",
+                        "name": "pluginName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "version info",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.PVersionOPT"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "success result",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "dbmodels.Plugin": {
+            "type": "object",
+            "properties": {
+                "audit_by": {
+                    "type": "string"
+                },
+                "author": {
+                    "type": "string"
+                },
+                "collaborators": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "create_time": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "last_version": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "repository_url": {
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Status plugin current status. 0: submitted 1: audited 2: published -1: unavailable",
+                    "type": "integer"
+                },
+                "update_time": {
+                    "type": "integer"
+                },
+                "versions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dbmodels.PluginVersion"
+                    }
+                }
+            }
+        },
+        "dbmodels.PluginVersion": {
+            "type": "object",
+            "properties": {
+                "config_example": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "string"
+                },
+                "upload_by": {
+                    "type": "string"
+                },
+                "upload_time": {
+                    "type": "integer"
+                },
+                "version_id": {
+                    "type": "integer"
+                },
+                "version_number": {
+                    "type": "string"
+                }
+            }
+        },
         "models.BaseResponse": {
             "type": "object",
             "properties": {
@@ -463,6 +780,61 @@ var doc = `{
                     "type": "string"
                 },
                 "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.PVersionOPT": {
+            "type": "object",
+            "required": [
+                "image",
+                "port",
+                "version_number"
+            ],
+            "properties": {
+                "config_example": {
+                    "description": "ConfigExample example of current program configuration file",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Description of the changes in the current version",
+                    "type": "string"
+                },
+                "image": {
+                    "description": "Image corresponding to the current version. e.g: mysql:1.1.1",
+                    "type": "string"
+                },
+                "port": {
+                    "description": "Port that the program listens on",
+                    "type": "string"
+                },
+                "version_number": {
+                    "description": "VersionNumber is current version number. e.g: v1.1.0",
+                    "type": "string"
+                }
+            }
+        },
+        "models.Plugin": {
+            "type": "object",
+            "required": [
+                "description",
+                "name",
+                "repo_url"
+            ],
+            "properties": {
+                "collaborators": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "repo_url": {
                     "type": "string"
                 }
             }

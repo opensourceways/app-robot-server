@@ -5,8 +5,10 @@ go_library(
     srcs = [
         "db.go",
         "error.go",
+        "plugins.go",
         "user.go",
     ],
     importpath = "github.com/opensourceways/app-robot-server/dbmodels",
     visibility = ["//visibility:public"],
+    deps = ["//global:go_default_library"],
 )

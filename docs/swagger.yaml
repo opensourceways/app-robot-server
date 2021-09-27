@@ -1,5 +1,55 @@
 basePath: /v1
 definitions:
+  dbmodels.Plugin:
+    properties:
+      audit_by:
+        type: string
+      author:
+        type: string
+      collaborators:
+        items:
+          type: string
+        type: array
+      create_time:
+        type: integer
+      description:
+        type: string
+      last_version:
+        type: string
+      name:
+        type: string
+      repository_url:
+        type: string
+      status:
+        description: 'Status plugin current status. 0: submitted 1: audited 2: published
+          -1: unavailable'
+        type: integer
+      update_time:
+        type: integer
+      versions:
+        items:
+          $ref: '#/definitions/dbmodels.PluginVersion'
+        type: array
+    type: object
+  dbmodels.PluginVersion:
+    properties:
+      config_example:
+        type: string
+      description:
+        type: string
+      image:
+        type: string
+      port:
+        type: string
+      upload_by:
+        type: string
+      upload_time:
+        type: integer
+      version_id:
+        type: integer
+      version_number:
+        type: string
+    type: object
   models.BaseResponse:
     properties:
       code:
@@ -15,6 +65,45 @@ definitions:
         type: string
       user_id:
         type: string
+    type: object
+  models.PVersionOPT:
+    properties:
+      config_example:
+        description: ConfigExample example of current program configuration file
+        type: string
+      description:
+        description: Description of the changes in the current version
+        type: string
+      image:
+        description: 'Image corresponding to the current version. e.g: mysql:1.1.1'
+        type: string
+      port:
+        description: Port that the program listens on
+        type: string
+      version_number:
+        description: 'VersionNumber is current version number. e.g: v1.1.0'
+        type: string
+    required:
+    - image
+    - port
+    - version_number
+    type: object
+  models.Plugin:
+    properties:
+      collaborators:
+        items:
+          type: string
+        type: array
+      description:
+        type: string
+      name:
+        type: string
+      repo_url:
+        type: string
+    required:
+    - description
+    - name
+    - repo_url
     type: object
 info:
   contact: {}
@@ -294,6 +383,154 @@ paths:
       summary: 用户名是否可用
       tags:
       - Accounts
+  /developer/plugins:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success result
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dbmodels.Plugin'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Plug-in developers get the list of plug-ins created by themselves
+      tags:
+      - developer
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: plugin data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Plugin'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: success result
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: add a plugin
+      tags:
+      - developer
+  /developer/plugins/{pluginName}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: plugin name
+        in: path
+        name: pluginName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success result
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dbmodels.Plugin'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Plug-in developers get the details of plug-ins created by themselves
+      tags:
+      - developer
+  /developer/plugins/{pluginName}/versions:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 'the plug-in corresponding to the version '
+        in: path
+        name: pluginName
+        required: true
+        type: string
+      - description: version info
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.PVersionOPT'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: success result
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: submit a new version for a plugin
+      tags:
+      - developer
 securityDefinitions:
   ApiKeyAuth:
     in: header

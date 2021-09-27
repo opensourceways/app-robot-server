@@ -81,7 +81,7 @@ func (c *client) GetUser(account, password string) (dbmodels.User, dbmodels.IDBE
 	if err := withContext(f); err != nil {
 		return user, newSystemError(err)
 	}
-	if len(result) != 1 && len(result[0].Users) != 1 {
+	if len(result) != 1 || len(result[0].Users) != 1 {
 		return user, errNoDBRecord
 	}
 	user = result[0].Users[0]

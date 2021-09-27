@@ -6,6 +6,7 @@ go_library(
         "account.go",
         "base.go",
         "jwt.go",
+        "plugins.go",
     ],
     importpath = "github.com/opensourceways/app-robot-server/models",
     visibility = ["//visibility:public"],

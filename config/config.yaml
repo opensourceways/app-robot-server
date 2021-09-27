@@ -16,3 +16,4 @@ mongo:
   connURI: mongodb://admin:123456@localhost:27017
   dbName: robot
   usersCollection: users
+  pluginsCollection: plugins
