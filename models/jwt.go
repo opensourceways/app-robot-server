@@ -21,11 +21,12 @@ type JWT struct {
 }
 
 type CustomClaims struct {
-	ID string
+	ID   string
+	Name string
 	jwt.StandardClaims
 }
 
-//NewJwt create a JWT object
+//NewJwt create a JWTConfig object
 func NewJwt() *JWT {
 	return &JWT{[]byte(config.Application.Jwt.SigningKey)}
 }
@@ -80,4 +81,22 @@ func (j *JWT) RefreshToken(tokenString string) (string, error) {
 		return j.CreateToken(*claims)
 	}
 	return "", TokenInvalid
+}
+
+func genToken(userId, name string) (string, error) {
+	j := NewJwt()
+	claims := CustomClaims{
+		ID:   userId,
+		Name: name,
+		StandardClaims: jwt.StandardClaims{
+			NotBefore: time.Now().Unix() - 1000,
+			ExpiresAt: time.Now().Unix() + config.Application.Jwt.TokenExpiration*60*60,
+			Issuer:    "app-robot-server",
+		},
+	}
+	token, err := j.CreateToken(claims)
+	if err != nil {
+		return "", err
+	}
+	return token, nil
 }

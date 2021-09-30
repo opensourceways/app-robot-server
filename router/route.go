@@ -42,7 +42,7 @@ func Init() *gin.Engine {
 	//router group
 	v1RG := ginRouter.Group("/v1")
 	{
-		registerRouters(v1RG, &v1.AccountController{})
+		registerRouters(v1RG, &v1.AccountController{}, &v1.PluginsController{})
 	}
 	return ginRouter
 }

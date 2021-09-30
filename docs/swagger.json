@@ -12,6 +12,80 @@
     },
     "basePath": "/v1",
     "paths": {
+        "/accounts/code": {
+            "get": {
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "账号注册获取验证码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "邮件发送成功",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts/email": {
+            "get": {
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "邮箱是否已注册",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "邮箱可用",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "邮箱已注册",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "返回失败状态",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/accounts/login": {
             "post": {
                 "consumes": [
@@ -46,13 +120,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/response.BaseResponse"
+                                    "$ref": "#/definitions/models.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/response.LoginResult"
+                                            "$ref": "#/definitions/models.LoginResult"
                                         }
                                     }
                                 }
@@ -62,19 +136,189 @@
                     "400": {
                         "description": "错误返回",
                         "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
+                            "$ref": "#/definitions/models.BaseResponse"
                         }
                     },
                     "403": {
                         "description": "错误返回",
                         "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
+                            "$ref": "#/definitions/models.BaseResponse"
                         }
                     },
                     "500": {
                         "description": "错误返回",
                         "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts/password": {
+            "get": {
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "发送找回密码邮件",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "邮件发送成功",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "邮箱校验失败",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "返回失败状态",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "重置密码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户ID",
+                        "name": "userID",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "旧密码",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "新密码",
+                        "name": "newPassword",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "修改成功",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "修改失败",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "token验证失败",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "服务器错误",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "邮件验证重置密码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "the key",
+                        "name": "key",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "new password",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "邮件发送成功",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "重置失败",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "验证失败",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "返回失败状态",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
                         }
                     }
                 }
@@ -96,7 +340,7 @@
                     {
                         "type": "string",
                         "description": "邮箱",
-                        "name": "account",
+                        "name": "email",
                         "in": "formData",
                         "required": true
                     },
@@ -109,14 +353,14 @@
                     },
                     {
                         "type": "string",
-                        "description": "用户名",
+                        "description": "用户名(仅字母数字组合)",
                         "name": "username",
                         "in": "formData",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "密码",
+                        "description": "密码（大小字母数字特殊字符满足三种）",
                         "name": "password",
                         "in": "formData",
                         "required": true
@@ -124,9 +368,301 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "返回注册状态",
+                        "description": "返回成功状态",
                         "schema": {
-                            "$ref": "#/definitions/response.BaseResponse"
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "返回失败状态",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "返回失败状态",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts/username": {
+            "get": {
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "用户名是否可用",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "用户名可用",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "用户名已注册",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/developer/plugins": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "developer"
+                ],
+                "summary": "Plug-in developers get the list of plug-ins created by themselves",
+                "responses": {
+                    "200": {
+                        "description": "success result",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dbmodels.Plugin"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "developer"
+                ],
+                "summary": "add a plugin",
+                "parameters": [
+                    {
+                        "description": "plugin data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Plugin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "success result",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/developer/plugins/{pluginName}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "developer"
+                ],
+                "summary": "Plug-in developers get the details of plug-ins created by themselves",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "plugin name",
+                        "name": "pluginName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success result",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/models.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dbmodels.Plugin"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/developer/plugins/{pluginName}/versions": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "developer"
+                ],
+                "summary": "submit a new version for a plugin",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "the plug-in corresponding to the version ",
+                        "name": "pluginName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "version info",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.PVersionOPT"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "success result",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
                         }
                     }
                 }
@@ -134,7 +670,81 @@
         }
     },
     "definitions": {
-        "response.BaseResponse": {
+        "dbmodels.Plugin": {
+            "type": "object",
+            "properties": {
+                "audit_by": {
+                    "type": "string"
+                },
+                "author": {
+                    "type": "string"
+                },
+                "collaborators": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "create_time": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "last_version": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "repository_url": {
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Status plugin current status. 0: submitted 1: audited 2: published -1: unavailable",
+                    "type": "integer"
+                },
+                "update_time": {
+                    "type": "integer"
+                },
+                "versions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dbmodels.PluginVersion"
+                    }
+                }
+            }
+        },
+        "dbmodels.PluginVersion": {
+            "type": "object",
+            "properties": {
+                "config_example": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "string"
+                },
+                "upload_by": {
+                    "type": "string"
+                },
+                "upload_time": {
+                    "type": "integer"
+                },
+                "version_id": {
+                    "type": "integer"
+                },
+                "version_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.BaseResponse": {
             "type": "object",
             "properties": {
                 "code": {
@@ -148,7 +758,7 @@
                 }
             }
         },
-        "response.LoginResult": {
+        "models.LoginResult": {
             "type": "object",
             "properties": {
                 "token": {
@@ -158,12 +768,67 @@
                     "type": "string"
                 }
             }
+        },
+        "models.PVersionOPT": {
+            "type": "object",
+            "required": [
+                "image",
+                "port",
+                "version_number"
+            ],
+            "properties": {
+                "config_example": {
+                    "description": "ConfigExample example of current program configuration file",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Description of the changes in the current version",
+                    "type": "string"
+                },
+                "image": {
+                    "description": "Image corresponding to the current version. e.g: mysql:1.1.1",
+                    "type": "string"
+                },
+                "port": {
+                    "description": "Port that the program listens on",
+                    "type": "string"
+                },
+                "version_number": {
+                    "description": "VersionNumber is current version number. e.g: v1.1.0",
+                    "type": "string"
+                }
+            }
+        },
+        "models.Plugin": {
+            "type": "object",
+            "required": [
+                "description",
+                "name",
+                "repo_url"
+            ],
+            "properties": {
+                "collaborators": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "repo_url": {
+                    "type": "string"
+                }
+            }
         }
     },
     "securityDefinitions": {
         "ApiKeyAuth": {
             "type": "apiKey",
-            "name": "x-token",
+            "name": "access-token",
             "in": "header"
         }
     }

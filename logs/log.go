@@ -37,7 +37,7 @@ func Init() error {
 	return nil
 }
 
-func registerFile(log config.Log) (logging.Backend, error) {
+func registerFile(log config.LogConfig) (logging.Backend, error) {
 	if ok := pathExists(logDir); !ok {
 		fmt.Println("create log directory")
 		_ = os.Mkdir(logDir, os.ModePerm)
@@ -58,7 +58,7 @@ func registerFile(log config.Log) (logging.Backend, error) {
 	return createBackend(fileWriter, log, level), nil
 }
 
-func registerStdout(log config.Log) logging.Backend {
+func registerStdout(log config.LogConfig) logging.Backend {
 	level, err := logging.LogLevel(log.Level)
 	if err != nil {
 		fmt.Println(err)
@@ -66,7 +66,7 @@ func registerStdout(log config.Log) logging.Backend {
 	return createBackend(os.Stdout, log, level)
 }
 
-func createBackend(w io.Writer, log config.Log, level logging.Level) logging.Backend {
+func createBackend(w io.Writer, log config.LogConfig, level logging.Level) logging.Backend {
 	backend := logging.NewLogBackend(w, log.Prefix, 0)
 	stoutWriter := false
 	if w == os.Stdout {

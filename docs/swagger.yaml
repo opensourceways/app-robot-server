@@ -1,6 +1,56 @@
 basePath: /v1
 definitions:
-  response.BaseResponse:
+  dbmodels.Plugin:
+    properties:
+      audit_by:
+        type: string
+      author:
+        type: string
+      collaborators:
+        items:
+          type: string
+        type: array
+      create_time:
+        type: integer
+      description:
+        type: string
+      last_version:
+        type: string
+      name:
+        type: string
+      repository_url:
+        type: string
+      status:
+        description: 'Status plugin current status. 0: submitted 1: audited 2: published
+          -1: unavailable'
+        type: integer
+      update_time:
+        type: integer
+      versions:
+        items:
+          $ref: '#/definitions/dbmodels.PluginVersion'
+        type: array
+    type: object
+  dbmodels.PluginVersion:
+    properties:
+      config_example:
+        type: string
+      description:
+        type: string
+      image:
+        type: string
+      port:
+        type: string
+      upload_by:
+        type: string
+      upload_time:
+        type: integer
+      version_id:
+        type: integer
+      version_number:
+        type: string
+    type: object
+  models.BaseResponse:
     properties:
       code:
         type: integer
@@ -9,12 +59,51 @@ definitions:
       msg:
         type: string
     type: object
-  response.LoginResult:
+  models.LoginResult:
     properties:
       token:
         type: string
       user_id:
         type: string
+    type: object
+  models.PVersionOPT:
+    properties:
+      config_example:
+        description: ConfigExample example of current program configuration file
+        type: string
+      description:
+        description: Description of the changes in the current version
+        type: string
+      image:
+        description: 'Image corresponding to the current version. e.g: mysql:1.1.1'
+        type: string
+      port:
+        description: Port that the program listens on
+        type: string
+      version_number:
+        description: 'VersionNumber is current version number. e.g: v1.1.0'
+        type: string
+    required:
+    - image
+    - port
+    - version_number
+    type: object
+  models.Plugin:
+    properties:
+      collaborators:
+        items:
+          type: string
+        type: array
+      description:
+        type: string
+      name:
+        type: string
+      repo_url:
+        type: string
+    required:
+    - description
+    - name
+    - repo_url
     type: object
 info:
   contact: {}
@@ -25,6 +114,54 @@ info:
   title: Swagger app-robot-server API
   version: 0.0.1
 paths:
+  /accounts/code:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: 邮箱
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 邮件发送成功
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: 账号注册获取验证码
+      tags:
+      - Accounts
+  /accounts/email:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: 邮箱
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 邮箱可用
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: 邮箱已注册
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: 返回失败状态
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: 邮箱是否已注册
+      tags:
+      - Accounts
   /accounts/login:
     post:
       consumes:
@@ -47,24 +184,136 @@ paths:
           description: 返回token和userId
           schema:
             allOf:
-            - $ref: '#/definitions/response.BaseResponse'
+            - $ref: '#/definitions/models.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/response.LoginResult'
+                  $ref: '#/definitions/models.LoginResult'
               type: object
         "400":
           description: 错误返回
           schema:
-            $ref: '#/definitions/response.BaseResponse'
+            $ref: '#/definitions/models.BaseResponse'
         "403":
           description: 错误返回
           schema:
-            $ref: '#/definitions/response.BaseResponse'
+            $ref: '#/definitions/models.BaseResponse'
         "500":
           description: 错误返回
           schema:
-            $ref: '#/definitions/response.BaseResponse'
+            $ref: '#/definitions/models.BaseResponse'
       summary: 账号密码登录
+      tags:
+      - Accounts
+  /accounts/password:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: 邮箱
+        in: formData
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 邮件发送成功
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: 邮箱校验失败
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: 返回失败状态
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: 发送找回密码邮件
+      tags:
+      - Accounts
+    patch:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: the key
+        in: formData
+        name: key
+        required: true
+        type: string
+      - description: email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: new password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 邮件发送成功
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: 重置失败
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "403":
+          description: 验证失败
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: 返回失败状态
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: 邮件验证重置密码
+      tags:
+      - Accounts
+    put:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: 用户ID
+        in: formData
+        name: userID
+        required: true
+        type: string
+      - description: 旧密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: 新密码
+        in: formData
+        name: newPassword
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 修改成功
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: 修改失败
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "401":
+          description: token验证失败
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: 服务器错误
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 重置密码
       tags:
       - Accounts
   /accounts/register:
@@ -74,7 +323,7 @@ paths:
       parameters:
       - description: 邮箱
         in: formData
-        name: account
+        name: email
         required: true
         type: string
       - description: 验证码
@@ -82,12 +331,12 @@ paths:
         name: code
         required: true
         type: string
-      - description: 用户名
+      - description: 用户名(仅字母数字组合)
         in: formData
         name: username
         required: true
         type: string
-      - description: 密码
+      - description: 密码（大小字母数字特殊字符满足三种）
         in: formData
         name: password
         required: true
@@ -96,15 +345,195 @@ paths:
       - application/json
       responses:
         "201":
-          description: 返回注册状态
+          description: 返回成功状态
           schema:
-            $ref: '#/definitions/response.BaseResponse'
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: 返回失败状态
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: 返回失败状态
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
       summary: 账号注册
       tags:
       - Accounts
+  /accounts/username:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: 用户名
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 用户名可用
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: 用户名已注册
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: 用户名是否可用
+      tags:
+      - Accounts
+  /developer/plugins:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success result
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dbmodels.Plugin'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Plug-in developers get the list of plug-ins created by themselves
+      tags:
+      - developer
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: plugin data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Plugin'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: success result
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: add a plugin
+      tags:
+      - developer
+  /developer/plugins/{pluginName}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: plugin name
+        in: path
+        name: pluginName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success result
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dbmodels.Plugin'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Plug-in developers get the details of plug-ins created by themselves
+      tags:
+      - developer
+  /developer/plugins/{pluginName}/versions:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 'the plug-in corresponding to the version '
+        in: path
+        name: pluginName
+        required: true
+        type: string
+      - description: version info
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.PVersionOPT'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: success result
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: submit a new version for a plugin
+      tags:
+      - developer
 securityDefinitions:
   ApiKeyAuth:
     in: header
-    name: x-token
+    name: access-token
     type: apiKey
 swagger: "2.0"
