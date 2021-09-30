@@ -2,11 +2,21 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "go_default_library",
-    srcs = ["jwt.go"],
+    srcs = [
+        "account.go",
+        "base.go",
+        "jwt.go",
+        "plugins.go",
+    ],
     importpath = "github.com/opensourceways/app-robot-server/models",
     visibility = ["//visibility:public"],
     deps = [
         "//config:go_default_library",
+        "//dbmodels:go_default_library",
+        "//global:go_default_library",
+        "//logs:go_default_library",
+        "//utils:go_default_library",
         "@com_github_dgrijalva_jwt_go//:go_default_library",
+        "@com_github_google_uuid//:go_default_library",
     ],
 )

@@ -5,14 +5,16 @@ go_library(
     srcs = [
         "account.go",
         "base.go",
+        "plugins.go",
     ],
     importpath = "github.com/opensourceways/app-robot-server/controller/v1",
     visibility = ["//visibility:public"],
     deps = [
+        "//dbmodels:go_default_library",
         "//global:go_default_library",
-        "//models/request:go_default_library",
-        "//models/response:go_default_library",
-        "//service:go_default_library",
+        "//logs:go_default_library",
+        "//middleware:go_default_library",
+        "//models:go_default_library",
         "@com_github_gin_gonic_gin//:go_default_library",
     ],
 )

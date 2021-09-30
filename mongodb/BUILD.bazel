@@ -1,0 +1,26 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "error.go",
+        "mongodb.go",
+        "ops.go",
+        "plugins.go",
+        "users.go",
+        "util.go",
+    ],
+    importpath = "github.com/opensourceways/app-robot-server/mongodb",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//config:go_default_library",
+        "//dbmodels:go_default_library",
+        "//global:go_default_library",
+        "//utils:go_default_library",
+        "@com_github_huaweicloud_golangsdk//:go_default_library",
+        "@org_mongodb_go_mongo_driver//bson:go_default_library",
+        "@org_mongodb_go_mongo_driver//bson/primitive:go_default_library",
+        "@org_mongodb_go_mongo_driver//mongo:go_default_library",
+        "@org_mongodb_go_mongo_driver//mongo/options:go_default_library",
+    ],
+)

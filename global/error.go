@@ -13,7 +13,14 @@ const (
 )
 
 const (
-	IllegalInputErrCode = 4001
+	IllegalInputErrCode        = 4001
+	RegisteredErrCode          = 4002
+	NoUserOrPasswordCode       = 4003
+	PluginNameExistCode        = 4004
+	InvalidUserCode            = 4005
+	NoRecodeCode               = 4006
+	PluginVersionIsExistCode   = 4007
+	PluginVersionNotRecodeCode = 4008
 )
 
 const (
@@ -21,14 +28,21 @@ const (
 )
 
 const (
-	NotFoundMsg           = "404 not found"
-	SuccessMsg            = "success"
-	UnauthorizedMsg       = "unauthorized, please re-authorize"
-	ServerErrorMsg        = "server internal error"
-	IllegalInputErrMsg    = "input is illegal"
-	AccountPasswordErrMsg = "incorrect account or password"
-	EmptyTokenErrMsg      = "token not obtained"
-	TokenHasExpiredMsg    = "token has expired"
+	NotFoundMsg               = "404 not found"
+	SuccessMsg                = "success"
+	UnauthorizedMsg           = "unauthorized, please re-authorize"
+	ServerErrorMsg            = "server internal error"
+	IllegalInputErrMsg        = "input is illegal"
+	AccountPasswordErrMsg     = "incorrect account or password"
+	EmptyTokenErrMsg          = "token not obtained"
+	TokenHasExpiredMsg        = "token has expired"
+	RegisteredErrMsg          = "input info is registered"
+	NoUserOrPasswordMsg       = "no user or password mismatch "
+	PluginNameExistMsg        = "already exist the same name plugin"
+	InvalidUserMsg            = "invalid user"
+	NoRecodeMsg               = "no corresponding data"
+	PluginVersionIsExistMsg   = "plugin version number is existed"
+	PluginVersionNotRecodeMsg = "plugin version number not found"
 )
 
 type Error interface {
@@ -49,4 +63,12 @@ func (re ResponseError) Code() int {
 
 func (re ResponseError) Msg() string {
 	return re.Reason
+}
+
+func NewResponseSystemError() ResponseError {
+	return ResponseError{ErrCode: SystemErrorCode, Reason: ServerErrorMsg}
+}
+
+func NewIllegalInputErr() ResponseError {
+	return ResponseError{ErrCode: IllegalInputErrCode, Reason: IllegalInputErrMsg}
 }

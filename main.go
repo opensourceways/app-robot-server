@@ -3,13 +3,16 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/opensourceways/app-robot-server/k8s"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
 	"github.com/opensourceways/app-robot-server/config"
+	"github.com/opensourceways/app-robot-server/dbmodels"
 	"github.com/opensourceways/app-robot-server/logs"
+	"github.com/opensourceways/app-robot-server/mongodb"
 	"github.com/opensourceways/app-robot-server/router"
 )
 
@@ -22,7 +25,7 @@ import (
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @in header
-// @name x-token
+// @name access-token
 // @BasePath /v1
 func main() {
 	//TODO: config file path parse from the args by flag package
@@ -31,6 +34,21 @@ func main() {
 	}
 
 	if err := logs.Init(); err != nil {
+		logs.Logger.Fatal(err)
+	}
+
+	db, err := mongodb.Initialize(&config.Application.Mongo)
+	if err != nil {
+		logs.Logger.Fatal(err)
+	}
+	dbmodels.RegisterDB(db)
+	err = dbmodels.GetDB().InitCUsers()
+	if err != nil {
+		logs.Logger.Fatal(err)
+	}
+
+	err = k8s.Init(&config.Application.Kubernetes)
+	if err != nil {
 		logs.Logger.Fatal(err)
 	}
 
