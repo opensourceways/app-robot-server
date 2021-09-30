@@ -17,8 +17,9 @@ mongo:
   dbName: robot
   usersCollection: users
   pluginsCollection: plugins
+  instanceCollection: instances
 
 #kubernetes configuration
 kubernetes:
-  kubeConfigPath: /home/.kube/config
+  kubeConfigPath: "c:/config/fighting.yaml"
   namespace: robot-plugin

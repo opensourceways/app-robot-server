@@ -30,6 +30,9 @@ type Client interface {
 	ReplaceDeployment(deploy *appsv1.Deployment) error
 	UpdateDeployment(name, image string, replicas int32) error
 	DeleteDeployment(name string) error
+
+	CreateService(svc *corev1.Service) (*corev1.Service, error)
+	DeleteService(name string) error
 }
 
 type client struct {
@@ -44,6 +47,10 @@ func (c *client) namespaceClient() tcv1.NamespaceInterface {
 
 func (c *client) deploymentsClient() tav1.DeploymentInterface {
 	return c.AppsV1().Deployments(c.namespace)
+}
+
+func (c client) servicesClient() tcv1.ServiceInterface {
+	return c.CoreV1().Services(c.namespace)
 }
 
 func (c *client) CreateNamespaceIfNotExist(ns string) error {
@@ -98,7 +105,17 @@ func (c *client) UpdateDeployment(name, image string, replicas int32) error {
 }
 
 func (c *client) DeleteDeployment(name string) error {
-	return c.deploymentsClient().Delete(c.ctx, name, metav1.DeleteOptions{})
+	deletePolicy := metav1.DeletePropagationForeground
+	return c.deploymentsClient().Delete(c.ctx, name, metav1.DeleteOptions{PropagationPolicy: &deletePolicy})
+}
+
+func (c *client) CreateService(svc *corev1.Service) (*corev1.Service, error) {
+	return c.servicesClient().Create(c.ctx, svc, metav1.CreateOptions{})
+}
+
+func (c *client) DeleteService(name string) error {
+	deletePolicy := metav1.DeletePropagationForeground
+	return c.servicesClient().Delete(c.ctx, name, metav1.DeleteOptions{PropagationPolicy: &deletePolicy})
 }
 
 func Init(cfg *config.KubernetesConfig) error {
@@ -111,7 +128,8 @@ func Init(cfg *config.KubernetesConfig) error {
 		return err
 	}
 	k8sClient = &client{Clientset: clientSet, ctx: context.TODO(), namespace: cfg.Namespace}
-	return nil
+	err = k8sClient.CreateNamespaceIfNotExist(cfg.Namespace)
+	return err
 }
 
 func int32Ptr(i int32) *int32 { return &i }

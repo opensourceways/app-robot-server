@@ -19,8 +19,9 @@ type client struct {
 	*mongo.Client
 	db *mongo.Database
 
-	usersCollection   string
-	pluginsCollection string
+	usersCollection    string
+	pluginsCollection  string
+	instanceCollection string
 }
 
 func (c *client) Close() error {
@@ -72,10 +73,11 @@ func Initialize(cfg *config.MongoDBConfig) (dbmodels.IDB, error) {
 	}
 
 	cli := &client{
-		Client:            c,
-		db:                c.Database(cfg.DBName),
-		usersCollection:   cfg.UsersCollection,
-		pluginsCollection: cfg.PluginsCollection,
+		Client:             c,
+		db:                 c.Database(cfg.DBName),
+		usersCollection:    cfg.UsersCollection,
+		pluginsCollection:  cfg.PluginsCollection,
+		instanceCollection: cfg.InstanceCollection,
 	}
 	return cli, nil
 }

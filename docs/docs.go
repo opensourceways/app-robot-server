@@ -682,6 +682,185 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/manage/instances": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "manage"
+                ],
+                "summary": "create plugin metadata for k8s cluster",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "plugin name",
+                        "name": "pName",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "plugin config",
+                        "name": "pConfig",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "plugin version",
+                        "name": "pVersion",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of pod copies (1-10)",
+                        "name": "replicas",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "success result",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/manage/instances/{insID}/options": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "manage"
+                ],
+                "summary": "create instances pods on k8s cluster by plugin metadata",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "plugin name",
+                        "name": "insID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "success result",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "manage"
+                ],
+                "summary": "delete k8s cluster pods by insID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "plugin name",
+                        "name": "insID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "success result",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

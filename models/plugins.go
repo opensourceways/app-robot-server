@@ -102,3 +102,26 @@ func GetPluginDetails(userName, pluginName string) (dbmodels.Plugin, global.Erro
 	logs.Logger.Error(idbError)
 	return detail, global.NewResponseSystemError()
 }
+
+func GetPluginDetailByName(pName string) (dbmodels.Plugin, global.Error) {
+	return GetPluginDetails("", pName)
+}
+
+func GetPluginVersionDetail(pName, version string) (vd dbmodels.PluginVersion, gErr global.Error) {
+	detail, gErr := GetPluginDetailByName(pName)
+	if gErr != nil {
+		return
+	}
+
+	for _, v := range detail.Versions {
+		if v.VersionNumber == version {
+			vd = v
+			break
+		}
+	}
+
+	if vd.VersionNumber == "" {
+		gErr = global.ResponseError{ErrCode: global.PluginVersionNotRecodeCode, Reason: global.PluginVersionNotRecodeMsg}
+	}
+	return
+}

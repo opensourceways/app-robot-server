@@ -29,6 +29,7 @@ require (
 	golang.org/x/tools v0.1.5 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/ini.v1 v1.63.0 // indirect
+	k8s.io/api v0.20.4 // indirect
 	k8s.io/apimachinery v0.22.2 // indirect
 	k8s.io/client-go v0.20.4
 )

@@ -531,6 +531,120 @@ paths:
       summary: submit a new version for a plugin
       tags:
       - developer
+  /manage/instances:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: plugin name
+        in: formData
+        name: pName
+        required: true
+        type: string
+      - description: plugin config
+        in: formData
+        name: pConfig
+        type: string
+      - description: plugin version
+        in: formData
+        name: pVersion
+        required: true
+        type: string
+      - description: Number of pod copies (1-10)
+        in: formData
+        name: replicas
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: success result
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: create plugin metadata for k8s cluster
+      tags:
+      - manage
+  /manage/instances/{insID}/options:
+    delete:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: plugin name
+        in: path
+        name: insID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: success result
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: delete k8s cluster pods by insID
+      tags:
+      - manage
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: plugin name
+        in: path
+        name: insID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: success result
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: create instances pods on k8s cluster by plugin metadata
+      tags:
+      - manage
 securityDefinitions:
   ApiKeyAuth:
     in: header

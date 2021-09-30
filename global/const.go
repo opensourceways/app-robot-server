@@ -18,3 +18,12 @@ const (
 	//PluginStatusUnavailable the plug-in unavailable,cannot start a new instance
 	PluginStatusUnavailable PluginStatus = -1
 )
+
+const (
+	InsSavedNotRun    InstanceStatus = 0
+	InsRunning        InstanceStatus = 1
+	InsStartException InstanceStatus = -1
+	InsNeedUpdate     InstanceStatus = 2
+)
+
+type InstanceStatus int

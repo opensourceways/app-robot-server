@@ -23,10 +23,11 @@ type JWTConfig struct {
 }
 
 type MongoDBConfig struct {
-	ConnURI           string `json:"connURI"`
-	DBName            string `json:"dbName"`
-	UsersCollection   string `json:"usersCollection"`
-	PluginsCollection string `json:"pluginsCollection"`
+	ConnURI            string `json:"connURI"`
+	DBName             string `json:"dbName"`
+	UsersCollection    string `json:"usersCollection"`
+	PluginsCollection  string `json:"pluginsCollection"`
+	InstanceCollection string `json:"instanceCollection"`
 }
 
 type appConfig struct {
